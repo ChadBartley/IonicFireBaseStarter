@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-/**
- * Generated class for the ProfilePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+// Auth Stuff
+import { AuthService } from '../../providers/auth/auth.service'
+import firebase from 'firebase';
+
+import {IUser, User} from '../../models/user';
 
 @IonicPage()
 @Component({
@@ -15,11 +14,27 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ProfilePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  private currentUser: IUser = <IUser>{};
+
+  constructor(public navCtrl: NavController, 
+              public navParams: NavParams,
+              public authService: AuthService) {
+
+      this.currentUser = firebase.auth().currentUser;
+    
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ProfilePage');
+
+  }
+
+  updateProfile(){
+    console.log(this.currentUser.phoneNumber);
+    this.authService.updateUserData(this.currentUser).then(res => {
+      console.log("Updated User");
+    }).catch(er => {
+      console.log("Error when updating user : " + er)
+    });
   }
 
 }

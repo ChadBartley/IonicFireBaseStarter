@@ -19,6 +19,9 @@ import { AngularFireModule } from 'angularfire2';
 //Environment Stuff
 import { environment } from '../environments/environment';
 
+// Pages 
+import { ProfilePageModule } from '../pages/profile/profile.module';
+
 import { GooglePlus} from '@ionic-native/google-plus';
 
 @NgModule({
@@ -30,6 +33,7 @@ import { GooglePlus} from '@ionic-native/google-plus';
     BrowserModule,
     HttpModule,
     AuthModule,
+    ProfilePageModule,
     AngularFireModule.initializeApp(environment.firebase),
     IonicModule.forRoot(MyApp)
   ],

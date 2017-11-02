@@ -4,23 +4,24 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap'
-interface User {
-  uid: string;
-  email: string;
-  photoURL?: string;
-  displayName?: string;
-  favoriteColor?: string;
-}
+
+//User Class
+import { IUser, User } from '../../models/user';
+
 @Injectable()
 export class AuthService {
-  user: Observable<User>;
+  
+  //firebase.UserInfo is the interface used to maintain user
+  //  info stored in the db
+  user: Observable<firebase.UserInfo>;
+
   constructor(private afAuth: AngularFireAuth,
               private afs: AngularFirestore) {
       //// Get auth data, then get firestore user document || null
       this.user = this.afAuth.authState
         .switchMap(user => {
           if (user) {
-            return this.afs.doc<User>(`users/${user.uid}`).valueChanges()
+            return this.afs.doc<firebase.UserInfo>(`users/${user.uid}`).valueChanges()
           } else {
             return Observable.of(null)
           }
@@ -39,21 +40,23 @@ export class AuthService {
       })
   }
 
-  private updateUserData(user) {
+  public updateUserData(user: IUser) {
     // Sets user data to firestore on login
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-    const data: User = {
+    const data: IUser = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
-      photoURL: user.photoURL
+      photoURL: user.photoURL,
+      phoneNumber: user.phoneNumber,
+      providerId: user.providerId,
+      favoriteColor: user.favoriteColor ? user.favoriteColor : ""
     }
-    return userRef.set(data)
+
+    return userRef.set(data);
   }
 
   signOut(): Promise<void> {
-    // this.afAuth.auth.signOut().then(() => {
-    // });
     return this.afAuth.auth.signOut();
   }
 

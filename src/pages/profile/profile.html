@@ -1,18 +1,54 @@
-<!--
-  Generated template for the ProfilePage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
   <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>Profile</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
 <ion-content padding>
+  <ion-grid>
+    <ion-row >
+      <img class="circle-pic" src="{{currentUser.photoURL}}" /><br/>
+    </ion-row>
+    
+    <ion-row>
+      <ion-col col-12>
+        <div text-center>
+          <h1>{{currentUser.displayName}}</h1>
+        </div>
+      </ion-col>
+    </ion-row>
 
+
+    <ion-row>
+        <ion-col col-12 text-center>
+          <form (ngSubmit)="updateProfile()">
+            <ion-item>
+              <ion-label>Email</ion-label><br/>
+              <ion-input [disabled]="true" type="text" [(ngModel)]="currentUser.email" name="email"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Favorite Color</ion-label>
+              <ion-select [(ngModel)]="currentUser.favoriteColor" name="favoriteColor">
+                <ion-option value=null>Select Color</ion-option>
+                <ion-option value="Green">Green</ion-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Phone Number</ion-label><br/>
+              <ion-input type="tel" [(ngModel)]="currentUser.phoneNumber" name="phoneNumber"></ion-input>
+            </ion-item>
+
+
+            <button ion-button type="submit">Submit</button>
+
+          </form>
+        </ion-col>
+      </ion-row>
+  </ion-grid>
 </ion-content>
